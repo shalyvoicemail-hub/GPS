@@ -1,0 +1,27 @@
+services:
+  signal-cli-rest-api:
+    image: bbernhard/signal-cli-rest-api:latest
+    container_name: signal-cli-rest-api
+    environment:
+      - MODE=native
+    volumes:
+      - signal-cli-config:/home/.local/share/signal-cli
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  app:
+    build: ./server
+    container_name: signal-connect-app
+    depends_on:
+      - signal-cli-rest-api
+    environment:
+      - SIGNAL_API_URL=http://signal-cli-rest-api:8080
+      - SIGNAL_NUMBER=${SIGNAL_NUMBER:-}
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  signal-cli-config:

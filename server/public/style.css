@@ -1,0 +1,115 @@
+:root {
+  color-scheme: light dark;
+  --bg: #0f1115;
+  --panel: #171a21;
+  --text: #e8eaed;
+  --muted: #9aa1ab;
+  --accent: #3a76f0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #262b36;
+}
+
+header h1 { font-size: 18px; margin: 0; }
+
+.badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #262b36;
+  color: var(--muted);
+}
+
+.badge.online { background: #1e3a2a; color: #6fd08c; }
+.badge.offline { background: #3a1e1e; color: #e08080; }
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+#linkPanel {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+#qrImage {
+  display: block;
+  margin: 20px auto;
+  width: 260px;
+  height: 260px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.hint { color: var(--muted); font-size: 13px; }
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover { opacity: 0.9; }
+
+.chat-log {
+  height: 420px;
+  overflow-y: auto;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msg {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.msg.in { align-self: flex-start; background: #262b36; }
+.msg.out { align-self: flex-end; background: var(--accent); }
+
+.msg .from { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+
+#sendForm {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#sendForm input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #262b36;
+  background: var(--panel);
+  color: var(--text);
+}
+
+#recipient { flex: 0 0 200px; }

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Signal Connect</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Signal Connect</h1>
+      <span id="statusBadge" class="badge">checking…</span>
+    </header>
+
+    <main>
+      <section id="linkPanel">
+        <h2>Link your Signal account</h2>
+        <p>
+          Open Signal on your phone &rarr; <strong>Settings &rarr; Linked devices &rarr; Link new device</strong>,
+          then scan this QR code.
+        </p>
+        <img id="qrImage" alt="Signal link QR code" />
+        <button id="refreshQr">Refresh QR code</button>
+        <p class="hint">
+          After scanning, set <code>SIGNAL_NUMBER</code> in <code>server/.env</code> to your linked number and
+          restart the server.
+        </p>
+      </section>
+
+      <section id="chatPanel" hidden>
+        <div class="chat-log" id="chatLog"></div>
+        <form id="sendForm">
+          <input id="recipient" type="text" placeholder="Recipient (+15551234567)" required />
+          <input id="messageText" type="text" placeholder="Type a message…" required />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
