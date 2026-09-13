@@ -1,0 +1,62 @@
+name: Deploy apartments-site to Fly.io
+
+on:
+  push:
+    branches: [claude/signal-connection-app-5osqe5, main]
+    paths:
+      - "apartments-site/**"
+      - ".github/workflows/deploy-apartments-site.yml"
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency: deploy-apartments-site
+    defaults:
+      run:
+        working-directory: apartments-site
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Resolve app name
+        id: app
+        run: |
+          NAME="${{ vars.FLY_APP_NAME }}"
+          if [ -z "$NAME" ]; then
+            NAME="rentfinder-$(echo "${{ github.repository }}" | md5sum | cut -c1-10)"
+          fi
+          echo "Using Fly app name: $NAME"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Create Fly app if it doesn't exist yet
+        run: |
+          if flyctl status --app "${{ steps.app.outputs.name }}" >/dev/null 2>&1; then
+            echo "App already exists."
+          else
+            flyctl apps create "${{ steps.app.outputs.name }}" --org personal
+          fi
+
+      - name: Create persistent volume if it doesn't exist yet
+        run: |
+          if flyctl volumes list --app "${{ steps.app.outputs.name }}" | grep -q '^data'; then
+            echo "Volume already exists."
+          else
+            flyctl volumes create data --app "${{ steps.app.outputs.name }}" --region ord --size 1 --yes
+          fi
+
+      - name: Set app secrets
+        run: |
+          flyctl secrets set \
+            ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
+            SESSION_SECRET="${{ secrets.SESSION_SECRET }}" \
+            --app "${{ steps.app.outputs.name }}"
+
+      - name: Deploy
+        run: flyctl deploy --remote-only --app "${{ steps.app.outputs.name }}"
+
+      - name: Show live URL
+        run: echo "Deployed to https://${{ steps.app.outputs.name }}.fly.dev"

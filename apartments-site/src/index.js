@@ -5,6 +5,7 @@ const session = require("express-session");
 
 const authRoutes = require("./routes/auth");
 const listingRoutes = require("./routes/listings");
+const { UPLOAD_DIR } = require("./upload");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -25,6 +26,7 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "..", "public")));
+app.use("/uploads", express.static(UPLOAD_DIR));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/listings", listingRoutes);

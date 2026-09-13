@@ -36,12 +36,42 @@ Listings you add immediately show up on the public site.
 
 ## Data storage
 
-- Listing data: `data/listings.json` (created automatically, gitignored).
-- Uploaded photos: `public/uploads/` (gitignored).
+- Listing data: `<DATA_DIR>/listings.json`.
+- Uploaded photos: `<DATA_DIR>/uploads/`.
 
-Both are local to wherever you run the app — back them up if you care about
-the listings you add. There's no built-in export; if you need one, the
-JSON file is plain, readable data.
+`DATA_DIR` defaults to `apartments-site/data` (gitignored) for local runs. In
+production (see Deploying below) it points at a persistent volume instead, so
+listings and photos survive restarts and redeploys. There's no built-in
+export; if you need one, the JSON file is plain, readable data.
+
+## Deploying it publicly (Fly.io)
+
+This repo includes a `Dockerfile`, `fly.toml`, and a GitHub Actions workflow
+(`.github/workflows/deploy-apartments-site.yml`) that deploys automatically
+on every push. One-time setup, no local CLI install needed:
+
+1. **Create a free Fly.io account** at https://fly.io.
+2. **Generate an API token**: in the Fly dashboard, go to
+   *Account → Access Tokens* and create one.
+3. **Add repo secrets** in GitHub (Settings → Secrets and variables →
+   Actions → New repository secret):
+   - `FLY_API_TOKEN` — the token from step 2.
+   - `ADMIN_PASSWORD` — the password you'll use to log into `/admin.html`.
+   - `SESSION_SECRET` — any long random string.
+4. *(Optional)* Add a repo **variable** `FLY_APP_NAME` with a globally-unique
+   name (e.g. `yourname-rentfinder`) if you want to pick your own subdomain.
+   Otherwise a name is generated automatically.
+5. **Push to this branch**, or run the workflow manually from the Actions
+   tab. It creates the Fly app and a persistent volume (first run only),
+   sets secrets, and deploys.
+
+Your site will be live at `https://<app-name>.fly.dev` — the workflow logs
+print the exact URL on each run. Every subsequent push to `apartments-site/`
+redeploys automatically; your listings and photos persist across deploys
+because they live on the mounted volume, not the container.
+
+If a run fails with "name already taken", someone else has that app name
+globally — set `FLY_APP_NAME` to something more unique and re-run.
 
 ## API
 
