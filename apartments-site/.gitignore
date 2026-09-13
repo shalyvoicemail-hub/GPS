@@ -1,0 +1,6 @@
+node_modules/
+.env
+data/listings.json
+public/uploads/*
+!public/uploads/.gitkeep
+*.log

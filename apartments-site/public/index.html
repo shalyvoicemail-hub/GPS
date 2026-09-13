@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Find Your Apartment</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">Rent<span>Finder</span></div>
+      <nav class="nav-links">
+        <a href="index.html">Browse</a>
+        <a href="admin.html">Manage listings</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>Find your next apartment</h1>
+      <p>Browse available units, search by city, price, and bedrooms.</p>
+      <form class="search-bar" id="searchForm">
+        <input type="text" id="cityInput" placeholder="City" />
+        <input type="number" id="minPriceInput" placeholder="Min price" min="0" />
+        <input type="number" id="maxPriceInput" placeholder="Max price" min="0" />
+        <input type="number" id="bedroomsInput" placeholder="Min bedrooms" min="0" />
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <main>
+      <div class="results-meta" id="resultsMeta"></div>
+      <div class="listing-grid" id="listingGrid"></div>
+    </main>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
