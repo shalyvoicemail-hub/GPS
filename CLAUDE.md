@@ -36,6 +36,28 @@ real legal exposure) call for an actual accessibility audit with assistive
 tech and, where relevant, legal sign-off — don't imply that following this
 checklist alone constitutes legal clearance.
 
+## Claude Artifact pages — standing requirement: single-page app, internal routing only
+
+Any page built as a Claude Artifact (published via the Artifact tool, not a
+standalone server-backed app) must stay a single HTML document with
+client-side routing only:
+
+- Different "views" (e.g. a browse list vs. a detail view vs. an admin
+  form) are shown by swapping content inside the page via JavaScript, never
+  by linking to a second `.html` file or triggering a real browser
+  navigation/reload.
+- Internal links use hash fragments (`href="#/listing/123"`) intercepted by
+  the page's own `hashchange` router — a hash-only link never causes a real
+  page load, so this is compatible with normal `<a>` semantics (keyboard
+  focusable, works with "open in new tab", etc.) without leaving the SPA.
+- Never point an Artifact's internal link at an external URL or a sibling
+  file expecting a full navigation.
+
+This does NOT apply to standalone server-backed apps (like `apartments-site`
+or `server` in this repo) — a real multi-page Express app with separate
+HTML files and normal browser navigation between them is completely normal
+and is not something to "fix" into a SPA unless asked.
+
 ## Project overview
 
 - `server/` — Signal Connect: a small app that links to Signal via
