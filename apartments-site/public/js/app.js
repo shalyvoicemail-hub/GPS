@@ -42,11 +42,13 @@ async function loadListings(params = {}) {
 
   if (!listings.length) {
     grid.innerHTML = "";
-    resultsMeta.textContent = "";
     grid.parentElement.querySelector(".empty-state")?.remove();
+    const message = "No apartments found. Try different search criteria, or check back soon.";
+    resultsMeta.textContent = message;
     const empty = document.createElement("div");
     empty.className = "empty-state";
-    empty.textContent = "No apartments found. Try different search criteria, or check back soon.";
+    empty.setAttribute("aria-hidden", "true");
+    empty.textContent = message;
     grid.after(empty);
     return;
   }

@@ -7,15 +7,19 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <a class="skip-link" href="#mainContent">Skip to listing details</a>
+
     <header class="site-header">
       <div class="brand">Rent<span>Finder</span></div>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Main">
         <a href="index.html">Browse</a>
         <a href="admin.html">Manage listings</a>
       </nav>
     </header>
 
-    <div class="detail-wrap" id="detailWrap">Loading…</div>
+    <main class="detail-wrap" id="mainContent" tabindex="-1">
+      <div id="detailWrap">Loading…</div>
+    </main>
 
     <script src="js/listing.js"></script>
   </body>

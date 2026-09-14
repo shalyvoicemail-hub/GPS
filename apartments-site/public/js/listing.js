@@ -19,10 +19,12 @@ function placeholderSvg() {
 function render(listing) {
   const images = listing.images.length ? listing.images.map((f) => `uploads/${f}`) : [placeholderSvg()];
 
+  const altBase = escapeHtml(listing.title || listing.address || "Apartment photo");
+
   wrap.innerHTML = `
-    <img class="gallery-main" id="mainImage" src="${images[0]}" alt="${escapeHtml(listing.title)}" />
-    ${images.length > 1 ? `<div class="gallery-thumbs" id="thumbs">${images
-      .map((src, i) => `<img src="${src}" data-index="${i}" class="${i === 0 ? "active" : ""}" />`)
+    <img class="gallery-main" id="mainImage" src="${images[0]}" alt="${altBase} — photo 1 of ${images.length}" />
+    ${images.length > 1 ? `<div class="gallery-thumbs" id="thumbs" role="group" aria-label="Photos">${images
+      .map((src, i) => `<button type="button" class="${i === 0 ? "active" : ""}" data-index="${i}" aria-current="${i === 0 ? "true" : "false"}" aria-label="Show photo ${i + 1} of ${images.length}"><img src="${src}" alt="" /></button>`)
       .join("")}</div>` : ""}
 
     <div class="detail-header">
@@ -37,18 +39,18 @@ function render(listing) {
       <div><strong>${listing.bedrooms}</strong> bed</div>
       <div><strong>${listing.bathrooms}</strong> bath</div>
       ${listing.sqft ? `<div><strong>${listing.sqft}</strong> sqft</div>` : ""}
-      <div>${listing.available ? "✅ Available" : "❌ Not available"}</div>
+      <div><span aria-hidden="true">${listing.available ? "✅" : "❌"}</span> ${listing.available ? "Available" : "Not available"}</div>
     </div>
 
-    ${listing.description ? `<div class="section-title">Description</div><p>${escapeHtml(listing.description)}</p>` : ""}
+    ${listing.description ? `<h2 class="section-title">Description</h2><p>${escapeHtml(listing.description)}</p>` : ""}
 
     ${listing.amenities.length ? `
-      <div class="section-title">Amenities</div>
+      <h2 class="section-title">Amenities</h2>
       <ul class="amenities-list">${listing.amenities.map((a) => `<li>${escapeHtml(a)}</li>`).join("")}</ul>
     ` : ""}
 
     <div class="contact-card">
-      <div class="section-title" style="margin-top:0">Contact</div>
+      <h2 class="section-title" style="margin-top:0">Contact</h2>
       ${listing.contactName ? `<div>${escapeHtml(listing.contactName)}</div>` : ""}
       ${listing.contactPhone ? `<div><a href="tel:${escapeHtml(listing.contactPhone)}">${escapeHtml(listing.contactPhone)}</a></div>` : ""}
       ${listing.contactEmail ? `<div><a href="mailto:${escapeHtml(listing.contactEmail)}">${escapeHtml(listing.contactEmail)}</a></div>` : ""}
@@ -58,11 +60,17 @@ function render(listing) {
 
   const mainImage = document.getElementById("mainImage");
   document.getElementById("thumbs")?.addEventListener("click", (e) => {
-    const img = e.target.closest("img[data-index]");
-    if (!img) return;
-    mainImage.src = images[Number(img.dataset.index)];
-    document.querySelectorAll("#thumbs img").forEach((t) => t.classList.remove("active"));
-    img.classList.add("active");
+    const btn = e.target.closest("button[data-index]");
+    if (!btn) return;
+    const index = Number(btn.dataset.index);
+    mainImage.src = images[index];
+    mainImage.alt = `${altBase} — photo ${index + 1} of ${images.length}`;
+    document.querySelectorAll("#thumbs button").forEach((t) => {
+      t.classList.remove("active");
+      t.setAttribute("aria-current", "false");
+    });
+    btn.classList.add("active");
+    btn.setAttribute("aria-current", "true");
   });
 }
 
@@ -75,9 +83,12 @@ async function init() {
   const res = await fetch(`/api/listings/${encodeURIComponent(id)}`);
   if (!res.ok) {
     wrap.innerHTML = `<p>Listing not found.</p>`;
+    document.title = "Listing not found – RentFinder";
     return;
   }
-  render(await res.json());
+  const listing = await res.json();
+  document.title = `${listing.title || listing.address || "Apartment"} – RentFinder`;
+  render(listing);
 }
 
 init();

@@ -7,30 +7,34 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <a class="skip-link" href="#mainContent">Skip to content</a>
+
     <header class="site-header">
       <div class="brand">Rent<span>Finder</span></div>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Main">
         <a href="index.html">Browse</a>
         <a href="admin.html">Manage listings</a>
       </nav>
     </header>
 
-    <div class="admin-wrap">
+    <main class="admin-wrap" id="mainContent" tabindex="-1">
+      <h1 class="visually-hidden">Manage listings</h1>
+
       <section class="panel" id="loginPanel">
-        <div class="section-title" style="margin-top:0">Admin login</div>
+        <h2 class="section-title" style="margin-top:0">Admin login</h2>
         <form id="loginForm">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" required />
+          <input type="password" id="password" name="password" autocomplete="current-password" required />
           <div style="margin-top:12px">
             <button class="btn" type="submit">Log in</button>
           </div>
-          <div class="msg error" id="loginMsg"></div>
+          <div class="msg error" id="loginMsg" role="alert"></div>
         </form>
       </section>
 
       <section id="adminContent" hidden>
         <section class="panel">
-          <div class="section-title" style="margin-top:0" id="formTitle">Add a new listing</div>
+          <h2 class="section-title" style="margin-top:0" id="formTitle">Add a new listing</h2>
           <form id="listingForm" enctype="multipart/form-data">
             <input type="hidden" id="listingId" />
             <div class="form-grid">
@@ -107,16 +111,16 @@
               <button class="btn" type="submit" id="submitBtn">Add listing</button>
               <button class="btn btn-secondary" type="button" id="cancelEditBtn" hidden>Cancel edit</button>
             </div>
-            <div class="msg" id="formMsg"></div>
+            <div class="msg" id="formMsg" role="alert"></div>
           </form>
         </section>
 
         <section class="panel">
-          <div class="section-title" style="margin-top:0">Your listings</div>
+          <h2 class="section-title" style="margin-top:0">Your listings</h2>
           <div id="adminListings"></div>
         </section>
       </section>
-    </div>
+    </main>
 
     <script src="js/admin.js"></script>
   </body>

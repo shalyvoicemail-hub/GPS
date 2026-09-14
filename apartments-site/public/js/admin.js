@@ -75,8 +75,8 @@ function fillFormForEdit(listing) {
     .map(
       (f) => `
       <div class="thumb-wrap">
-        <img src="uploads/${f}" />
-        <button type="button" data-filename="${f}" title="Remove photo">×</button>
+        <img src="uploads/${f}" alt="" />
+        <button type="button" data-filename="${f}" aria-label="Remove this photo">×</button>
       </div>`
     )
     .join("");
@@ -144,14 +144,14 @@ async function loadAdminListings() {
     .map(
       (l) => `
       <div class="admin-listing-row" data-id="${l.id}">
-        <img src="${l.images[0] ? "uploads/" + l.images[0] : ""}" />
+        <img src="${l.images[0] ? "uploads/" + l.images[0] : ""}" alt="" />
         <div class="info">
           <div class="title">${escapeHtml(l.title || l.address)}</div>
           <div class="meta">$${Number(l.price).toLocaleString()}/mo · ${l.bedrooms}bd/${l.bathrooms}ba · ${escapeHtml(l.city)}</div>
         </div>
         <div class="row-actions">
-          <button class="btn btn-secondary" data-action="edit">Edit</button>
-          <button class="btn btn-danger" data-action="delete">Delete</button>
+          <button class="btn btn-secondary" data-action="edit" aria-label="Edit ${escapeHtml(l.title || l.address)}">Edit</button>
+          <button class="btn btn-danger" data-action="delete" aria-label="Delete ${escapeHtml(l.title || l.address)}">Delete</button>
         </div>
       </div>`
     )

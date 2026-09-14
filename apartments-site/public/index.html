@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <a class="skip-link" href="#mainContent">Skip to listings</a>
+
     <header class="site-header">
       <div class="brand">Rent<span>Finder</span></div>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Main">
         <a href="index.html">Browse</a>
         <a href="admin.html">Manage listings</a>
       </nav>
@@ -18,17 +20,29 @@
     <section class="hero">
       <h1>Find your next apartment</h1>
       <p>Browse available units, search by city, price, and bedrooms.</p>
-      <form class="search-bar" id="searchForm">
-        <input type="text" id="cityInput" placeholder="City" />
-        <input type="number" id="minPriceInput" placeholder="Min price" min="0" />
-        <input type="number" id="maxPriceInput" placeholder="Max price" min="0" />
-        <input type="number" id="bedroomsInput" placeholder="Min bedrooms" min="0" />
+      <form class="search-bar" id="searchForm" role="search" aria-label="Search apartments">
+        <div class="field-group">
+          <label for="cityInput">City</label>
+          <input type="text" id="cityInput" placeholder="e.g. Springfield" />
+        </div>
+        <div class="field-group">
+          <label for="minPriceInput">Min price</label>
+          <input type="number" id="minPriceInput" placeholder="$" min="0" inputmode="numeric" />
+        </div>
+        <div class="field-group">
+          <label for="maxPriceInput">Max price</label>
+          <input type="number" id="maxPriceInput" placeholder="$" min="0" inputmode="numeric" />
+        </div>
+        <div class="field-group">
+          <label for="bedroomsInput">Min bedrooms</label>
+          <input type="number" id="bedroomsInput" placeholder="0" min="0" inputmode="numeric" />
+        </div>
         <button type="submit">Search</button>
       </form>
     </section>
 
-    <main>
-      <div class="results-meta" id="resultsMeta"></div>
+    <main id="mainContent" tabindex="-1">
+      <div class="results-meta" id="resultsMeta" role="status" aria-live="polite"></div>
       <div class="listing-grid" id="listingGrid"></div>
     </main>
 
